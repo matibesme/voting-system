@@ -1,6 +1,8 @@
 package votos
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type partidoImplementacion struct {
 	nombre          string
@@ -16,6 +18,7 @@ func CrearPartido(nombre string, candidatos [CANT_VOTACION]string) Partido {
 	return &partidoImplementacion{
 		nombre:     nombre,
 		candidatos: candidatos,
+		votosCandidatos: [CANT_VOTACION]int{},
 	}
 }
 
@@ -29,7 +32,7 @@ func (partido *partidoImplementacion) VotadoPara(tipo TipoVoto) {
 }
 
 func (partido partidoImplementacion) ObtenerResultado(tipo TipoVoto) string {
-	cadena := fmt.Sprintf("", partido.nombre, partido.candidatos[tipo])
+	cadena := fmt.Sprintf("", partido.nombre, partido.candidatos[tipo],strconv(partido.))
 	return partido.nombre
 }
 

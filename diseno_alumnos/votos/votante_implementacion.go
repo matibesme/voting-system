@@ -1,24 +1,22 @@
 package votos
 
 import (
-	"tp1/diseno_alumnos/errores"
 	TDAPila "tdas/pila"
+	"tp1/diseno_alumnos/errores"
 )
 
 type votanteImplementacion struct {
-	dni int
-	pilaVotos TDAPila.Pila[Voto]
+	dni         int
+	pilaVotos   TDAPila.Pila[Voto]
 	fraudulento bool
-	voto Voto
-
+	voto        Voto
 }
 
 func CrearVotante(dni int) Votante {
 	return &votanteImplementacion{
-		dni:  dni,
-		votos: TDAPila.CrearPilaDinamica[Voto]()
+		dni:         dni,
+		pilaVotos:   TDAPila.CrearPilaDinamica[Voto](),
 		fraudulento: false,
-
 	}
 }
 
@@ -27,32 +25,39 @@ func (votante votanteImplementacion) LeerDNI() int {
 }
 
 func (votante *votanteImplementacion) Votar(tipo TipoVoto, alternativa int) error {
-	
-	if votante.fraudulento{
-		return errores.ErrorVotanteFraudulento{dni: votante.dni}
-	}
 
-	votante.voto.VotoPorTipo[tipo]=alternativa
+	if votante.fraudulento {
+		return errores.ErrorVotanteFraudulento{Dni: votante.dni}
+	}
+	if alternativa == 0 {
+		votante.voto.Impugnado = true
+	} else {
+		votante.voto.VotoPorTipo[tipo] = alternativa
+	}
 	votante.pilaVotos.Apilar(votante.voto)
 	return nil
 
 }
 
 func (votante *votanteImplementacion) Deshacer() error {
-	
-	if votante.pilaVotos.EstaVacia(){
+
+	if votante.fraudulento {
+		return errores.ErrorVotanteFraudulento{Dni: votante.dni}
+	}
+
+	if votante.pilaVotos.EstaVacia() {
 		return errores.ErrorNoHayVotosAnteriores{}
 	}
 
-	if votante.fraudulento{
-		return errores.ErrorVotanteFraudulento{dni: votante.dni}
-	}
-	
+	votante.pilaVotos.Desapilar()
 
-
-	voto = votante.pilaVotos.Desapilar()
+	return nil
 }
 
 func (votante *votanteImplementacion) FinVoto() (Voto, error) {
-	return Voto{}, nil
+	if votante.fraudulento {
+		return votante.voto, errores.ErrorVotanteFraudulento{Dni: votante.dni}
+	}
+	votante.fraudulento = true
+	return votante.voto, nil
 }
