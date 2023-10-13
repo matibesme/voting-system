@@ -7,15 +7,16 @@ import (
 
 type votanteImplementacion struct {
 	dni int
-	pilaVotos TDAPila.Pila[]
+	pilaVotos TDAPila.Pila[Voto]
 	fraudulento bool
+	voto Voto
 
 }
 
 func CrearVotante(dni int) Votante {
-	return votanteImplementacion{
+	return &votanteImplementacion{
 		dni:  dni,
-		votos: TDAPila.CrearPilaDinamica[]()
+		votos: TDAPila.CrearPilaDinamica[Voto]()
 		fraudulento: false,
 
 	}
@@ -27,6 +28,14 @@ func (votante votanteImplementacion) LeerDNI() int {
 
 func (votante *votanteImplementacion) Votar(tipo TipoVoto, alternativa int) error {
 	
+	if votante.fraudulento{
+		return errores.ErrorVotanteFraudulento{dni: votante.dni}
+	}
+
+	votante.voto.VotoPorTipo[tipo]=alternativa
+	votante.pilaVotos.Apilar(votante.voto)
+	return nil
+
 }
 
 func (votante *votanteImplementacion) Deshacer() error {
@@ -34,6 +43,13 @@ func (votante *votanteImplementacion) Deshacer() error {
 	if votante.pilaVotos.EstaVacia(){
 		return errores.ErrorNoHayVotosAnteriores{}
 	}
+
+	if votante.fraudulento{
+		return errores.ErrorVotanteFraudulento{dni: votante.dni}
+	}
+	
+
+
 	voto = votante.pilaVotos.Desapilar()
 }
 
