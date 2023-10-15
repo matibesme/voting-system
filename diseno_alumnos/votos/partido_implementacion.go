@@ -18,7 +18,7 @@ func CrearPartido(nombre string, candidatos [CANT_VOTACION]string) Partido {
 	return &partidoImplementacion{
 		nombre:     nombre,
 		candidatos: candidatos,
-		votosCandidatos: [CANT_VOTACION]int{},
+		votosCandidatos: [CANT_VOTACION]int{0,0,0},
 	}
 }
 
@@ -32,8 +32,11 @@ func (partido *partidoImplementacion) VotadoPara(tipo TipoVoto) {
 }
 
 func (partido partidoImplementacion) ObtenerResultado(tipo TipoVoto) string {
-	cadena := fmt.Sprintf("", partido.nombre, partido.candidatos[tipo],strconv(partido.))
-	return partido.nombre
+	formato := "%s - %s: %d voto"
+	if partido.votosCandidatos[tipo] != 1 {
+		formato = "%s - %s: %d votos"
+	}
+	return fmt.Sprintf(formato, partido.nombre, partido.candidatos[tipo], partido.votosCandidatos[tipo])
 }
 
 func (blanco *partidoEnBlanco) VotadoPara(tipo TipoVoto) {
@@ -41,5 +44,8 @@ func (blanco *partidoEnBlanco) VotadoPara(tipo TipoVoto) {
 }
 
 func (blanco partidoEnBlanco) ObtenerResultado(tipo TipoVoto) string {
-	return ""
+	if blanco.votosBlancos[tipo] == 1 {
+		return fmt.Sprintf("Votos en Blanco: %d voto", blanco.votos[tipo])
+	}
+	return fmt.Sprintf("Votos en Blanco: %d votos", blanco.votosBlancos[tipo])
 }

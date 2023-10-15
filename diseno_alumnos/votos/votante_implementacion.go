@@ -9,7 +9,7 @@ type votanteImplementacion struct {
 	dni         int
 	pilaVotos   TDAPila.Pila[Voto]
 	fraudulento bool
-	voto        Voto
+	voto       Voto
 }
 
 func CrearVotante(dni int) Votante {
@@ -29,7 +29,7 @@ func (votante *votanteImplementacion) Votar(tipo TipoVoto, alternativa int) erro
 	if votante.fraudulento {
 		return errores.ErrorVotanteFraudulento{Dni: votante.dni}
 	}
-	if alternativa == 0 {
+	if alternativa == LISTA_IMPUGNA {
 		votante.voto.Impugnado = true
 	} else {
 		votante.voto.VotoPorTipo[tipo] = alternativa
@@ -58,6 +58,7 @@ func (votante *votanteImplementacion) FinVoto() (Voto, error) {
 	if votante.fraudulento {
 		return votante.voto, errores.ErrorVotanteFraudulento{Dni: votante.dni}
 	}
+	
 	votante.fraudulento = true
 	return votante.voto, nil
 }
