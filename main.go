@@ -1,5 +1,18 @@
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+
+	"tdas/cola"
+	"tp1/acciones"
+	"tp1/diseno_alumnos/errores"
+	"tp1/diseno_alumnos/votos"
+)
+
+/*
 Implementacion) VotadoPara(tipo TipoVoto) {
 	partido.votosCandidatos[tipo]++
 
@@ -22,8 +35,7 @@ func (blanco partidoEnBlanco) ObtenerResultado(tipo TipoVoto) string {
 		return fmt.Sprintf("Votos en Blanco: %d voto", blanco.votos[tipo])
 	}
 	return fmt.Sprintf("Votos en Blanco: %d votos", blanco.votosBlancos[tipo])
-}
-
+}*/
 
 func main() {
 
@@ -33,7 +45,7 @@ func main() {
 	}
 
 	lista_partidos := partidosEnArchivo(os.Args[1])
-	lista_padrones := partidosEnArchivo(os.Args[2])
+	lista_padrones := padronesEnArchivo(os.Args[2])
 
 	if lista_partidos == nil || lista_padrones == nil {
 		fmt.Print(errores.ErrorLeerArchivo{})
@@ -49,16 +61,16 @@ func main() {
 
 		switch entrada[0] {
 		case "ingresar":
-			acciones.IngresarVotante(entrada[1])
+			acciones.IngresarVotante(entrada[1], cola_votantes, lista_padrones)
 
 		case "votar":
-			acciones.Votar()
+			acciones.Votar(entrada, cola_votantes)
 
 		case "deshacer":
 			acciones.Deshacer()
 
 		case "fin-votar":
-			acciones.FinVotar()
+			acciones.FinVotar(cola_votantes)
 
 		}
 
@@ -115,4 +127,17 @@ func dniEnPadron() {
 
 }
 
-func CrearPartidos(partidos []string) []votos.Partido {}
+func CrearPartidos(lista_partidos []string) []votos.Partido {
+
+	var partidos []votos.Partido
+
+	for _, partido := range lista_partidos {
+		cargo_partidos := strings.Split(partido, ",")
+		postulantes := [3]string{cargo_partidos[1], cargo_partidos[2], cargo_partidos[3]}
+		partidos = append(partidos, votos.CrearPartido(cargo_partidos[0], postulantes))
+
+	}
+
+	return partidos
+
+}

@@ -9,7 +9,7 @@ import (
 )
 
 func IngresarVotante(dni_string string,cola cola.Cola[int], padron []votos.Votante) {
-
+	//convierte string a int
 	dni, err := strconv.Atoi(numeroStr)
 
 	if dni <= 0 || len(dni_str) != 8 {
@@ -61,9 +61,27 @@ func Deshacer(cola.Cola[int]) {
 
 }
 
-func FinVotar() {}
+func FinVotar(cola.Cola[int]) {
+	if cola.EstaVacia(){
+		fmt.Println(errores.FilaVacia{})
+	} else{
 
-func Fin() {}
+		
+	}
+
+
+}
+
+func Fin(cola.Cola[int]) {
+	if cola.EstaVacia(){
+		fmt.Println(errores.FilaVacia{})
+	} else{
+
+		
+	}
+
+
+}
 
 
 

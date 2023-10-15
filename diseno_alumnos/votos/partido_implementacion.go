@@ -16,9 +16,9 @@ type partidoEnBlanco struct {
 
 func CrearPartido(nombre string, candidatos [CANT_VOTACION]string) Partido {
 	return &partidoImplementacion{
-		nombre:     nombre,
-		candidatos: candidatos,
-		votosCandidatos: [CANT_VOTACION]int{0,0,0},
+		nombre:          nombre,
+		candidatos:      candidatos,
+		votosCandidatos: [CANT_VOTACION]int{0, 0, 0},
 	}
 }
 
