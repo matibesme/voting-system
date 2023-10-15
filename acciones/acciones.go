@@ -37,15 +37,27 @@ func Votar(entrada []string, cola.Cola[int]) {
 	} else if cargo=="INVALIDO"{
 		fmt.Println(errores.ErrorTipoVoto{})
 	}else if  {
+		//CONDICION
 		fmt.Println(errores.ErrorAlternativaInvalida{})
 	}
 	else{
+		
+
 
 	}
 
 }
 
-func Deshacer() {
+func Deshacer(cola.Cola[int]) {
+
+	if cola.EstaVacia(){
+		fmt.Println(errores.FilaVacia{})
+	} else{
+
+		
+	}
+
+
 
 }
 
@@ -55,7 +67,7 @@ func Fin() {}
 
 
 
-func verificoCargoAVotar(cargo string){
+func verificoCargoAVotar(cargo string) votos.TipoVoto{
 	switch cargo {
 	case "Presidente":
 		return votos.PRESIDENTE
@@ -70,7 +82,5 @@ func verificoCargoAVotar(cargo string){
 		return "INVALIDO"
 
 	}
-
-
 
 }
