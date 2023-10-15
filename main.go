@@ -1,15 +1,29 @@
 package main
 
-import (
-	"bufio"
-	"fmt"
-	"os"
-	"strings"
-	"tdas/cola"
-	"tp1/acciones"
-	"tp1/diseno_alumnos/errores"
-	"tp1/diseno_alumnos/votos"
-)
+Implementacion) VotadoPara(tipo TipoVoto) {
+	partido.votosCandidatos[tipo]++
+
+}
+
+func (partido partidoImplementacion) ObtenerResultado(tipo TipoVoto) string {
+	formato := "%s - %s: %d voto"
+	if partido.votosCandidatos[tipo] != 1 {
+		formato = "%s - %s: %d votos"
+	}
+	return fmt.Sprintf(formato, partido.nombre, partido.candidatos[tipo], partido.votosCandidatos[tipo])
+}
+
+func (blanco *partidoEnBlanco) VotadoPara(tipo TipoVoto) {
+	blanco.votos[tipo]++
+}
+
+func (blanco partidoEnBlanco) ObtenerResultado(tipo TipoVoto) string {
+	if blanco.votosBlancos[tipo] == 1 {
+		return fmt.Sprintf("Votos en Blanco: %d voto", blanco.votos[tipo])
+	}
+	return fmt.Sprintf("Votos en Blanco: %d votos", blanco.votosBlancos[tipo])
+}
+
 
 func main() {
 
@@ -35,7 +49,7 @@ func main() {
 
 		switch entrada[0] {
 		case "ingresar":
-			acciones.IngresarVotante()
+			acciones.IngresarVotante(entrada[1])
 
 		case "votar":
 			acciones.Votar()
