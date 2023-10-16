@@ -78,7 +78,7 @@ func main() {
 
 	}
 
-	acciones.Fin(cola_votantes)
+	acciones.ResultadosElectorales(crear_partidos,cola_votantes)
 
 }
 
@@ -126,11 +126,7 @@ func partidoValido(partidos []string, cantPartido int) bool {
 	return len(partidos) >= cantPartido
 }
 
-// algun algoritmo de ordenamiento para fijarse que este el dni
-// llamado desde acciones
-func dniEnPadron() {
 
-}
 
 func CrearPartidos(lista_partidos []string) []votos.Partido {
 

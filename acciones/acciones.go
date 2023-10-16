@@ -32,11 +32,11 @@ func IngresarVotante(dni_string string,cola cola.Cola[int], padron []votos.Votan
 
 func Votar(entrada []string,cola cola.Cola[int],padron []votos.Votante,crear_partidos []votos.Partido,lista_partidos []string) {
 	//evaluo errores
-	cargo=verificoCargoAVotar(entrada[1])
+	cargo := verificoCargoAVotar(entrada[1])
 
 	if cola.EstaVacia(){
 		fmt.Println(errores.FilaVacia{})
-	} else if cargo=="INVALIDO"{
+	} else if cargo == "INVALIDO"{
 		fmt.Println(errores.ErrorTipoVoto{})
 	}else if  {
 		//CONDICION
@@ -61,13 +61,14 @@ func Deshacer(cola cola.Cola[int],padrones []votos.Votante) {
 	if cola.EstaVacia(){
 		fmt.Println(errores.FilaVacia{})
 	} else{
-		test:=padron[cola.CrearColaEnlazada().VerPrimero()].Deshacer()
-		if test ==nil{
-			fmt.PrintIn()
-		}else if{
-		
+		test:=padron[cola.VerPrimero()].Deshacer()
+		if test == nil{
+			fmt.Println("OK")
+		}else if test == errores.ErrorNoHayVotosAnteriores{} {
+			fmt.Println(test)
 		}else{
-
+			fmt.Println(test)
+			cola.Desencolar()
 		}
 		
 	}
@@ -76,11 +77,11 @@ func Deshacer(cola cola.Cola[int],padrones []votos.Votante) {
 
 }
 
-func FinVoto(cola.Cola[int],padrones []votos.Votante,crear_partidos []votos.Partido) {
+func FinVoto(cola cola.Cola[int],padrones []votos.Votante,crear_partidos []votos.Partido) {
 	if cola.EstaVacia(){
 		fmt.Println(errores.FilaVacia{})
 	} else{
-		votante_actual:=padrones[cola.CrearColaEnlazada().Desencolar()]
+		votante_actual:=padrones[cola.Desencolar()]
 		datos,erL:=votante.FinVoto()
 		if err!=nil{
 			fmt.Println((err))
@@ -98,15 +99,26 @@ func FinVoto(cola.Cola[int],padrones []votos.Votante,crear_partidos []votos.Part
 
 }
 
-func Fin(cola.Cola[int]) {
-	if cola.EstaVacia(){
-		fmt.Println(errores.FilaVacia{})
-	} 
-
-	for i := 0; i < 3; i++{
-
-	}	
+func ResultadosElectorales(partidosCreados []votos.Partido, cola_voto cola.Cola[int], padrones []votos.Votante) {
+	if !cola_voto.EstaVacia() {
+		fmt.Println(errores.ErrorCiudadanosSinVotar{})
+	}
+	for i := 0; i < 3; i++ {
+		tipo_voto := votos.TipoVoto(i)
+		for j := 0; j < len(partidosCreados); j++ {
+			fmt.Println()
+		}
+		fmt.Println()
+	}
+	fmt.Println("Votos Impugnados:", partidosCreados[0].ObtenerResultado())
 }
+
+
+
+
+
+
+
 
 func verificoCargoAVotar(cargo string) votos.TipoVoto{
 	switch cargo {
