@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"tdas/cola"
-	"tp1/acciones"
+
 	"tp1/diseno_alumnos/errores"
 	"tp1/diseno_alumnos/votos"
 )
@@ -30,7 +30,7 @@ func IngresarVotante(dni_string string,cola cola.Cola[int], padron []votos.Votan
 
 }
 
-func Votar(entrada []string, cola.Cola[int],padron []votos.Votante,crear_partidos []votos.Partido,lista_partidos []string) {
+func Votar(entrada []string,cola cola.Cola[int],padron []votos.Votante,crear_partidos []votos.Partido,lista_partidos []string) {
 	//evaluo errores
 	cargo=verificoCargoAVotar(entrada[1])
 
@@ -43,8 +43,14 @@ func Votar(entrada []string, cola.Cola[int],padron []votos.Votante,crear_partido
 		fmt.Println(errores.ErrorAlternativaInvalida{})
 	}
 	else{
-		
-
+		votar:=(padropadron[cola.VerPrimero()]).Votar()
+		if votar==nil{
+			fmt.Println("OK")
+		}else{
+			//error de votar
+			fmt.Println(votar)
+			cola.Desencolar()
+		}
 
 	}
 
