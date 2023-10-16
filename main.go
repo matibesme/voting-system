@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"tdas/cola"
@@ -52,7 +53,8 @@ func main() {
 		return
 	}
 
-	partidos := CrearPartidos(lista_partidos)
+	crear_partidos := CrearPartidos(lista_partidos)
+	padrones := acciones.OrdenarPadron(lista_padrones)
 	cola_votantes := cola.CrearColaEnlazada[int]()
 
 	texto_ingresado := bufio.NewScanner(os.Stdin)
@@ -64,19 +66,19 @@ func main() {
 			acciones.IngresarVotante(entrada[1], cola_votantes, lista_padrones)
 
 		case "votar":
-			acciones.Votar(entrada, cola_votantes)
+			acciones.Votar(entrada, cola_votantes, padrones, crear_partidos, lista_partidos)
 
 		case "deshacer":
-			acciones.Deshacer()
+			acciones.Deshacer(cola_votantes, padrones)
 
 		case "fin-votar":
-			acciones.FinVotar(cola_votantes)
+			acciones.FinVoto(cola_votantes, padrones, crear_partidos)
 
 		}
 
 	}
 
-	acciones.Fin()
+	acciones.Fin(cola_votantes)
 
 }
 
@@ -110,8 +112,11 @@ func padronesEnArchivo(archivo_lista string) []votos.Votante {
 	defer archivo.Close()
 	lector := bufio.NewScanner(archivo)
 	for lector.Scan() {
-		//dni deberia ser string?
-		padron = append(padron, votos.CrearVotante(lector.Text()))
+		dni_en_num, err := strconv.Atoi(lector.Text())
+		if err != nil {
+			fmt.Println(errores.DNIError{})
+		}
+		padron = append(padron, votos.CrearVotante(dni_en_num))
 	}
 	return padron
 

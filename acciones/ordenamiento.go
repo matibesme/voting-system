@@ -1,30 +1,32 @@
+package acciones
 
 import (
-    "bufio"
-    "fmt"
-    "os"
-    "strconv"
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"tp1/diseno_alumnos/votos"
 )
 
 
 
-func OrdenarPadron(padron []int) []int {
+func OrdenarPadron(padron []votos.Votante) []votos.Votante {
 	if len(padron) <= 1 {
         return dnis
     }
-	pivot := padron[len(dnis)/2]
-	var menores []int
-	var iguales []int
-	var mayores []int
-	for _,dni := range padron {
-		if dni < pivot {
-			menores = append(menores,dni)
-		} else if dni > pivot {
-			mayores = append(mayores,dni)
+	pivot := padron[len(dnis)/2].LeerDNI()
+	var menores,iguales,mayores []votos.Votante
+
+	for i := 0; i < len(padron); i++ {
+		if padron[i].LeerDNI() < pivot {
+			menores = append(menores,padron[i])
+		} else if padron[i].LeerDNI() > pivot {
+			mayores = append(mayores,padron[i])
 		} else {
-			iguales = append(iguales,dni)
+			iguales = append(iguales,padron[i])
 		}
 	}
+
 	menores = OrdenarPadron(menores)
 	mayores= OrdenarPadron(mayores)
 	menores = append(menores,iguales)
@@ -32,18 +34,18 @@ func OrdenarPadron(padron []int) []int {
 	return menores
 }
 
-func EstaEnPadron(dni int, padron []int) bool {
+func EstaEnPadron(dni int, padron []votos.Voto) votos.Votante {
 	return estaEnPadron(dni,padron,0,len(padron)-1)
 }
 
-func estaEnPadron(dni int, padron []int, ini, fin) bool {
+func estaEnPadron(dni int, padron []int, ini, fin)  {
 	if ini == fin {
-		return false
+		return false,nil
 	}
 	medio := (ini + fin) / 2
-	if padron[medio] == dni {
-		return true
-	} else if padron[medio] > dni {
+	if padron[medio].LeerDNI() == dni {
+		return true,padron[medio]
+	} else if padron[medio].LeerDNI() > dni {
 		return estaEnPadron(dni, padron, 0, medio)
 	} else {
 		return estaEnPadron(dni, padron, medio+1, fin)
