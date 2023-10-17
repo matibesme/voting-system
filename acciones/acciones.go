@@ -9,25 +9,20 @@ import (
 	"tp1/diseno_alumnos/votos"
 )
 
-func IngresarVotante(dni_string string,cola cola.Cola[int], padron []votos.Votante) {
-	//convierte string a int
-	dni, err := strconv.Atoi(numeroStr)
+func IngresarVotante(dni_string string, cola cola.Cola[int], padron []votos.Votante) {
+	dni, err := strconv.Atoi(dni_string)
 
-
-	if dni <= 0 || len(dni_str) != 8 {
+	if err != nil || dni <= 0 || len(dni_string) != 8 {
 		fmt.Println(errores.DNIError{})
 	} else {
-		//buscar dni
-		valor,votante := acciones.EstaEnPadron(dni, padron)
-
-		if valor == false {
+		valor, votante := EstaEnPadron(dni, padron)
+		if !valor {
 			fmt.Println(errores.DNIFueraPadron{})
 		} else {
 			cola.Encolar(votante)
-			fmt.Printf("OK")
+			fmt.Println("OK")
 		}
 	}
-
 }
 
 func Votar(entrada []string,cola cola.Cola[int],padron []votos.Votante,crear_partidos []votos.Partido,lista_partidos []string) {
@@ -77,63 +72,47 @@ func Deshacer(cola cola.Cola[int],padrones []votos.Votante) {
 
 }
 
-func FinVoto(cola cola.Cola[int],padrones []votos.Votante,crear_partidos []votos.Partido) {
-	if cola.EstaVacia(){
+func FinVoto(cola cola.Cola[int], padrones []votos.Votante, crear_partidos []votos.Partido, tipoVoto votos.TipoVoto) {
+	if cola.EstaVacia() {
 		fmt.Println(errores.FilaVacia{})
-	} else{
-		votante_actual:=padrones[cola.Desencolar()]
-		datos,erL:=votante.FinVoto()
-		if err!=nil{
-			fmt.Println((err))
-		} else{
-			if datos.Impugnado{
-				crear_partidos[0].VotadoPara(votos.TipoVoto())
+	} else {
+		votante_actual := padrones[cola.VerPrimero()]
+		datos, err := votante_actual.FinVoto()
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			if datos.Impugnado {
+				crear_partidos[0].VotadoPara(tipoVoto)
 				fmt.Println("OK")
-			}else{
+			} else {
 				fmt.Println("OK")
 			}
 		}
-		
 	}
-
-
 }
 
 func ResultadosElectorales(partidosCreados []votos.Partido, cola_voto cola.Cola[int], padrones []votos.Votante) {
 	if !cola_voto.EstaVacia() {
 		fmt.Println(errores.ErrorCiudadanosSinVotar{})
 	}
-	for i := 0; i < 3; i++ {
-		tipo_voto := votos.TipoVoto(i)
-		for j := 0; j < len(partidosCreados); j++ {
-			fmt.Println()
+	for tipo_voto := votos.PRESIDENTE; tipo_voto < votos.CANT_VOTACION; tipo_voto++ {
+		for _, partido := range partidosCreados {
+			fmt.Println(partido.ObtenerResultado(tipo_voto))
 		}
 		fmt.Println()
 	}
-	fmt.Println("Votos Impugnados:", partidosCreados[0].ObtenerResultado())
+	fmt.Println("Votos Impugnados:", partidosCreados[0].ObtenerResultado(votos.LISTA_IMPUGNA))
 }
 
-
-
-
-
-
-
-
-func verificoCargoAVotar(cargo string) votos.TipoVoto{
+func verificoCargoAVotar(cargo string) (votos.TipoVoto, error) {
 	switch cargo {
 	case "Presidente":
-		return votos.PRESIDENTE
-
+		return votos.PRESIDENTE, nil
 	case "Gobernador":
-		return votos.GOBERNADOR
-
+		return votos.GOBERNADOR, nil
 	case "Intendente":
-		return votos.INTENDENTE
-
-	default: 
-		return "INVALIDO"
-
+		return votos.INTENDENTE, nil
+	default:
+		return votos.CANT_VOTACION, errores.ErrorTipoVoto{}
 	}
-
 }
