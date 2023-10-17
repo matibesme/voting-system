@@ -84,6 +84,7 @@ func padronesEnArchivo(archivo_lista string) []votos.Votante {
 	// leer archivo de padrones
 	var padron []votos.Votante
 	archivo, err := os.Open(archivo_lista)
+
 	if err != nil {
 		return nil
 	}
