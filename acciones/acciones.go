@@ -8,6 +8,8 @@ import (
 	"tp1/diseno_alumnos/votos"
 )
 
+var contador_impugnados = 0
+
 func IngresarVotante(dni_string string, cola cola.Cola[int], padron []votos.Votante) {
 	dni, err := strconv.Atoi(dni_string)
 
@@ -77,6 +79,8 @@ func FinVoto(cola cola.Cola[int], padrones []votos.Votante, partidos []votos.Par
 		datos, err := votante_actual.FinVoto()
 		if err != nil {
 			fmt.Println(err)
+		} else if datos.Impugnado {
+			contador_impugnados++
 		} else {
 			fmt.Println("OK")
 			for i := 0; i < 3; i++ {
@@ -96,7 +100,7 @@ func ResultadosElectorales(partidosCreados []votos.Partido, cola_voto cola.Cola[
 		}
 		fmt.Println()
 	}
-	fmt.Println("Votos Impugnados:", partidosCreados[0].ObtenerResultado(votos.LISTA_IMPUGNA))
+	fmt.Println("Votos Impugnados:", contador_impugnados)
 }
 
 func verificoCargoAVotar(cargo string) (votos.TipoVoto, error) {
