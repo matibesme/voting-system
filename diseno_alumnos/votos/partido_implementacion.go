@@ -44,8 +44,8 @@ func (blanco *partidoEnBlanco) VotadoPara(tipo TipoVoto) {
 }
 
 func (blanco partidoEnBlanco) ObtenerResultado(tipo TipoVoto) string {
-	if blanco.votosBlancos[tipo] == 1 {
+	if blanco.votos[tipo] == 1 {
 		return fmt.Sprintf("Votos en Blanco: %d voto", blanco.votos[tipo])
 	}
-	return fmt.Sprintf("Votos en Blanco: %d votos", blanco.votosBlancos[tipo])
+	return fmt.Sprintf("Votos en Blanco: %d votos", blanco.votos[tipo])
 }

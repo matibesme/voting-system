@@ -11,7 +11,6 @@ import (
 	"tp1/acciones"
 	"tp1/diseno_alumnos/errores"
 	"tp1/diseno_alumnos/votos"
-	
 )
 
 /*
@@ -79,7 +78,7 @@ func main() {
 
 	}
 
-	acciones.ResultadosElectorales(crear_partidos,cola_votantes)
+	acciones.ResultadosElectorales(crear_partidos, cola_votantes, padrones)
 
 }
 
@@ -123,16 +122,11 @@ func padronesEnArchivo(archivo_lista string) []votos.Votante {
 
 }
 
-func partidoValido(partidos []string, cantPartido int) bool {
-	return len(partidos) >= cantPartido
-}
-
-
-
 func CrearPartidos(lista_partidos []string) []votos.Partido {
 
 	var partidos []votos.Partido
 
+	partidos = append(partidos, votos.CrearVotosEnBlanco())
 	for _, partido := range lista_partidos {
 		cargo_partidos := strings.Split(partido, ",")
 		postulantes := [3]string{cargo_partidos[1], cargo_partidos[2], cargo_partidos[3]}
