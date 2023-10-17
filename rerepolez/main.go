@@ -13,31 +13,6 @@ import (
 	"tp1/diseno_alumnos/votos"
 )
 
-/*
-Implementacion) VotadoPara(tipo TipoVoto) {
-	partido.votosCandidatos[tipo]++
-
-}
-
-func (partido partidoImplementacion) ObtenerResultado(tipo TipoVoto) string {
-	formato := "%s - %s: %d voto"
-	if partido.votosCandidatos[tipo] != 1 {
-		formato = "%s - %s: %d votos"
-	}
-	return fmt.Sprintf(formato, partido.nombre, partido.candidatos[tipo], partido.votosCandidatos[tipo])
-}
-
-func (blanco *partidoEnBlanco) VotadoPara(tipo TipoVoto) {
-	blanco.votos[tipo]++
-}
-
-func (blanco partidoEnBlanco) ObtenerResultado(tipo TipoVoto) string {
-	if blanco.votosBlancos[tipo] == 1 {
-		return fmt.Sprintf("Votos en Blanco: %d voto", blanco.votos[tipo])
-	}
-	return fmt.Sprintf("Votos en Blanco: %d votos", blanco.votosBlancos[tipo])
-}*/
-
 func main() {
 
 	if len(os.Args) != 3 {
@@ -49,6 +24,7 @@ func main() {
 	lista_padrones := padronesEnArchivo(os.Args[2])
 
 	if lista_partidos == nil || lista_padrones == nil {
+		fmt.Println(lista_partidos)
 		fmt.Print(errores.ErrorLeerArchivo{})
 		return
 	}
@@ -88,16 +64,19 @@ func main() {
 func partidosEnArchivo(archivo_lista string) []string {
 	var partidos []string
 	archivo, err := os.Open(archivo_lista)
+
 	if err != nil {
 		return nil
 	}
-
+	fmt.Println("hola")
 	defer archivo.Close()
 	lector := bufio.NewScanner(archivo)
+
 	for lector.Scan() {
 
 		partidos = append(partidos, lector.Text())
 	}
+
 	return partidos
 }
 
