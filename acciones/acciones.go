@@ -28,12 +28,12 @@ func IngresarVotante(dni_string string, cola cola.Cola[int], padron []votos.Vota
 
 func Votar(entrada []string, cola cola.Cola[int], padron []votos.Votante, crear_partidos []votos.Partido, lista_partidos []string) {
 	//evaluo errores
-	cargo, err := verificoCargoAVotar(entrada[1])
+	cargo, err2 := verificoCargoAVotar(entrada[1])
 	candidato, err := strconv.Atoi(entrada[2])
 
 	if cola.EstaVacia() {
 		fmt.Println(errores.FilaVacia{})
-	} else if cargo == 3 {
+	} else if err2 != nil || cargo == 3 {
 		fmt.Println(errores.ErrorTipoVoto{})
 	} else if err != nil || !partidoValido(lista_partidos, candidato) {
 		//CONDICION
