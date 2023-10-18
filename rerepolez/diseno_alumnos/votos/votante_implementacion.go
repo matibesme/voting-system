@@ -1,8 +1,8 @@
 package votos
 
 import (
+	"rerepolez/diseno_alumnos/errores"
 	TDAPila "tdas/pila"
-	"tp1/diseno_alumnos/errores"
 )
 
 type votanteImplementacion struct {
@@ -48,8 +48,12 @@ func (votante *votanteImplementacion) Deshacer() error {
 	if votante.pilaVotos.EstaVacia() {
 		return errores.ErrorNoHayVotosAnteriores{}
 	}
-
 	votante.pilaVotos.Desapilar()
+
+	if votante.pilaVotos.EstaVacia() {
+		votante.voto = votante.pilaVotos.VerTope()
+
+	}
 
 	return nil
 }

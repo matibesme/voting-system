@@ -1,7 +1,7 @@
 package acciones
 
 import (
-	"tp1/diseno_alumnos/votos"
+	"rerepolez/diseno_alumnos/votos"
 )
 
 func OrdenarPadron(padron []votos.Votante) []votos.Votante {
@@ -34,6 +34,7 @@ func OrdenarPadron(padron []votos.Votante) []votos.Votante {
 }
 
 func EstaEnPadron(dni int, padron []votos.Votante) int {
+
 	return estaEnPadron(dni, padron, 0, len(padron)-1)
 }
 

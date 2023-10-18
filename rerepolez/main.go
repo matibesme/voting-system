@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"strings"
 
+	"rerepolez/acciones"
+	"rerepolez/diseno_alumnos/errores"
+	"rerepolez/diseno_alumnos/votos"
 	"tdas/cola"
-	"tp1/acciones"
-	"tp1/diseno_alumnos/errores"
-	"tp1/diseno_alumnos/votos"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 	}
 
 	crear_partidos := CrearPartidos(lista_partidos)
-	padrones := acciones.OrdenarPadron(lista_padrones)
+	padrones_ordenados := acciones.OrdenarPadron(lista_padrones)
 	cola_votantes := cola.CrearColaEnlazada[int]()
 
 	texto_ingresado := bufio.NewScanner(os.Stdin)
@@ -39,22 +39,23 @@ func main() {
 
 		switch entrada[0] {
 		case "ingresar":
-			acciones.IngresarVotante(entrada[1], cola_votantes, lista_padrones)
+			acciones.AccionIngresarVotante(entrada[1], cola_votantes, padrones_ordenados)
 
 		case "votar":
-			acciones.Votar(entrada, cola_votantes, padrones, crear_partidos, lista_partidos)
+			acciones.AccionVotar(entrada, cola_votantes, padrones_ordenados, crear_partidos, lista_partidos)
 
 		case "deshacer":
-			acciones.Deshacer(cola_votantes, padrones)
+			acciones.AccionDeshacer(cola_votantes, padrones_ordenados)
 
 		case "fin-votar":
-			acciones.FinVoto(cola_votantes, padrones, crear_partidos)
+			acciones.AccionFinVotante(cola_votantes, padrones_ordenados, crear_partidos)
 
+		case "":
+			acciones.AccionResultadosElectorales(crear_partidos, cola_votantes, padrones_ordenados)
+			break
 		}
 
 	}
-
-	acciones.ResultadosElectorales(crear_partidos, cola_votantes, padrones)
 
 }
 
@@ -68,7 +69,6 @@ func partidosEnArchivo(archivo_lista string) []string {
 	if err != nil {
 		return nil
 	}
-	fmt.Println("hola")
 	defer archivo.Close()
 	lector := bufio.NewScanner(archivo)
 
