@@ -48,13 +48,13 @@ func main() {
 
 		case "fin-votar":
 			acciones.AccionFinVotante(cola_votantes, padrones_ordenados, crear_partidos)
-
-		case "":
-			acciones.AccionResultadosElectorales(crear_partidos, cola_votantes, padrones_ordenados)
-			break
 		}
 
 	}
+	if !cola_votantes.EstaVacia() {
+		fmt.Println(errores.ErrorCiudadanosSinVotar{})
+	}
+	acciones.AccionResultadosElectorales(crear_partidos, cola_votantes, padrones_ordenados)
 
 }
 

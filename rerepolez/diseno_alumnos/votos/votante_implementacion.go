@@ -49,12 +49,7 @@ func (votante *votanteImplementacion) Deshacer() error {
 		return errores.ErrorNoHayVotosAnteriores{}
 	}
 	votante.pilaVotos.Desapilar()
-
-	if votante.pilaVotos.EstaVacia() {
-		votante.voto = votante.pilaVotos.VerTope()
-
-	}
-
+	
 	return nil
 }
 
