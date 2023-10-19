@@ -10,6 +10,7 @@ import (
 
 var CONTADOR_IMPUGNADOS = 0
 var CARGOS = []string{"Presidente", "Gobernador", "Intendente"}
+var ENTRADA = []string{"ingresar", "votar", "deshacer", "fin-votar"}
 
 func AccionIngresarVotante(dni_string string, cola cola.Cola[int], padron []votos.Votante) {
 	dni, err := strconv.Atoi(dni_string)
@@ -115,21 +116,4 @@ func AccionResultadosElectorales(partidosCreados []votos.Partido, cola_voto cola
 	} else {
 		fmt.Println("Votos Impugnados:", CONTADOR_IMPUGNADOS, "votos")
 	}
-}
-
-func verificoCargoAVotar(cargo string) (votos.TipoVoto, error) {
-	switch cargo {
-	case CARGOS[0]:
-		return votos.PRESIDENTE, nil
-	case CARGOS[1]:
-		return votos.GOBERNADOR, nil
-	case CARGOS[2]:
-		return votos.INTENDENTE, nil
-	default:
-		return votos.CANT_VOTACION, errores.ErrorTipoVoto{}
-	}
-}
-
-func partidoValido(partidos []string, cantPartido int) bool {
-	return len(partidos) >= cantPartido
 }
