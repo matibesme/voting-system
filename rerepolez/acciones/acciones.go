@@ -23,7 +23,6 @@ func AccionIngresarVotante(dni_string string, cola cola.Cola[int], padron []voto
 			fmt.Println(errores.DNIFueraPadron{})
 		} else {
 			cola.Encolar(votante)
-			fmt.Println(padron[votante].LeerDNI())
 			fmt.Println("OK")
 		}
 	}
@@ -67,7 +66,6 @@ func AccionDeshacer(cola cola.Cola[int], padrones []votos.Votante) {
 	if cola.EstaVacia() {
 		fmt.Println(errores.FilaVacia{})
 	} else {
-		fmt.Println(padrones[cola.VerPrimero()])
 		deshacer := padrones[cola.VerPrimero()].Deshacer()
 		if deshacer == (errores.ErrorVotanteFraudulento{}) {
 			fmt.Println(deshacer)

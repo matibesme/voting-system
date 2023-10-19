@@ -24,7 +24,6 @@ func main() {
 	lista_padrones := padronesEnArchivo(os.Args[2])
 
 	if lista_partidos == nil || lista_padrones == nil {
-		fmt.Println(lista_partidos)
 		fmt.Print(errores.ErrorLeerArchivo{})
 		return
 	}
