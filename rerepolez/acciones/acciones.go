@@ -14,11 +14,10 @@ var CARGOS = []string{"Presidente", "Gobernador", "Intendente"}
 func AccionIngresarVotante(dni_string string, cola cola.Cola[int], padron []votos.Votante) {
 	dni, err := strconv.Atoi(dni_string)
 
-	if err != nil || dni <= 0 || len(dni_string) != 8 {
+	if err != nil || dni <= 0 {
 		fmt.Println(errores.DNIError{})
 	} else {
 		votante := EstaEnPadron(dni, padron)
-
 		if votante == -1 {
 			fmt.Println(errores.DNIFueraPadron{})
 		} else {
@@ -29,7 +28,6 @@ func AccionIngresarVotante(dni_string string, cola cola.Cola[int], padron []voto
 }
 
 func AccionVotar(entrada []string, cola cola.Cola[int], padron []votos.Votante, crear_partidos []votos.Partido, lista_partidos []string) {
-	//evaluo errores
 
 	if len(entrada) != 3 {
 		fmt.Println(errores.ErrorParametros{})
@@ -67,13 +65,14 @@ func AccionDeshacer(cola cola.Cola[int], padrones []votos.Votante) {
 		fmt.Println(errores.FilaVacia{})
 	} else {
 		deshacer := padrones[cola.VerPrimero()].Deshacer()
-		if deshacer == (errores.ErrorVotanteFraudulento{}) {
+		if deshacer == (errores.ErrorNoHayVotosAnteriores{}) {
 			fmt.Println(deshacer)
-		} else if deshacer == (errores.ErrorNoHayVotosAnteriores{}) {
-			fmt.Println(deshacer)
-		} else {
-
+		} else if deshacer == nil {
 			fmt.Println("OK")
+		} else {
+			fmt.Println(deshacer)
+			cola.Desencolar()
+
 		}
 	}
 
@@ -83,18 +82,19 @@ func AccionFinVotante(cola cola.Cola[int], padrones []votos.Votante, partidos []
 	if cola.EstaVacia() {
 		fmt.Println(errores.FilaVacia{})
 	} else {
-		votante_actual := padrones[cola.VerPrimero()]
+		votante_actual := padrones[cola.Desencolar()]
 		datos, err := votante_actual.FinVoto()
 		if err != nil {
 			fmt.Println(err)
 		} else if datos.Impugnado {
 			CONTADOR_IMPUGNADOS++
+			fmt.Println("OK")
 		} else {
 			fmt.Println("OK")
 			for i := 0; i < 3; i++ {
 				partidos[datos.VotoPorTipo[i]].VotadoPara(votos.TipoVoto(i))
 			}
-			cola.Desencolar()
+
 		}
 	}
 }
@@ -110,7 +110,11 @@ func AccionResultadosElectorales(partidosCreados []votos.Partido, cola_voto cola
 		}
 		fmt.Println()
 	}
-	fmt.Println("Votos Impugnados:", CONTADOR_IMPUGNADOS)
+	if CONTADOR_IMPUGNADOS == 1 {
+		fmt.Println("Votos Impugnados:", CONTADOR_IMPUGNADOS, "voto")
+	} else {
+		fmt.Println("Votos Impugnados:", CONTADOR_IMPUGNADOS, "votos")
+	}
 }
 
 func verificoCargoAVotar(cargo string) (votos.TipoVoto, error) {

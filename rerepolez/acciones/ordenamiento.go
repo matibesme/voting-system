@@ -35,7 +35,7 @@ func OrdenarPadron(padron []votos.Votante) []votos.Votante {
 
 func EstaEnPadron(dni int, padron []votos.Votante) int {
 
-	return estaEnPadron(dni, padron, 0, len(padron)-1)
+	return estaEnPadron(dni, padron, 0, len(padron))
 }
 
 func estaEnPadron(dni int, padron []votos.Votante, ini, fin int) int {

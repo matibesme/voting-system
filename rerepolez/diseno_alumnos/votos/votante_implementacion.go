@@ -29,12 +29,13 @@ func (votante *votanteImplementacion) Votar(tipo TipoVoto, alternativa int) erro
 	if votante.fraudulento {
 		return errores.ErrorVotanteFraudulento{Dni: votante.dni}
 	}
+	votante.pilaVotos.Apilar(votante.voto)
 	if alternativa == LISTA_IMPUGNA {
 		votante.voto.Impugnado = true
 	} else {
 		votante.voto.VotoPorTipo[tipo] = alternativa
 	}
-	votante.pilaVotos.Apilar(votante.voto)
+
 	return nil
 
 }
@@ -48,12 +49,7 @@ func (votante *votanteImplementacion) Deshacer() error {
 	if votante.pilaVotos.EstaVacia() {
 		return errores.ErrorNoHayVotosAnteriores{}
 	}
-	votante.pilaVotos.Desapilar()
-
-	if votante.pilaVotos.EstaVacia() {
-		votante.voto = votante.pilaVotos.VerTope()
-
-	}
+	votante.voto = votante.pilaVotos.Desapilar()
 
 	return nil
 }

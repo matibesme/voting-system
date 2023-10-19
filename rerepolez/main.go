@@ -24,7 +24,8 @@ func main() {
 	lista_padrones := padronesEnArchivo(os.Args[2])
 
 	if lista_partidos == nil || lista_padrones == nil {
-		fmt.Print(errores.ErrorLeerArchivo{})
+
+		fmt.Println(errores.ErrorLeerArchivo{})
 		return
 	}
 
@@ -48,13 +49,10 @@ func main() {
 
 		case "fin-votar":
 			acciones.AccionFinVotante(cola_votantes, padrones_ordenados, crear_partidos)
-
-		case "":
-			acciones.AccionResultadosElectorales(crear_partidos, cola_votantes, padrones_ordenados)
-			break
 		}
 
 	}
+	acciones.AccionResultadosElectorales(crear_partidos, cola_votantes, padrones_ordenados)
 
 }
 
