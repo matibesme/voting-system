@@ -4,10 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"rerepolez/diseno_alumnos/errores"
-	"rerepolez/diseno_alumnos/votos"
 	"strconv"
 	"strings"
+	"tp1/diseno_alumnos/errores"
+	"tp1/diseno_alumnos/votos"
 )
 
 func PartidosEnArchivo(archivo_lista string) []string {

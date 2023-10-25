@@ -4,10 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"rerepolez/acciones"
-	"rerepolez/diseno_alumnos/errores"
 	"strings"
 	"tdas/cola"
+	"tp1/acciones"
+	"tp1/diseno_alumnos/errores"
 )
 
 func main() {

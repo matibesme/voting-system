@@ -2,15 +2,16 @@ package acciones
 
 import (
 	"fmt"
-	"rerepolez/diseno_alumnos/errores"
-	"rerepolez/diseno_alumnos/votos"
 	"strconv"
 	"tdas/cola"
+	"tp1/diseno_alumnos/errores"
+	"tp1/diseno_alumnos/votos"
 )
 
 var CONTADOR_IMPUGNADOS = 0
 var CARGOS = []string{"Presidente", "Gobernador", "Intendente"}
 var ENTRADA = []string{"ingresar", "votar", "deshacer", "fin-votar"}
+
 
 func AccionIngresarVotante(dni_string string, cola cola.Cola[int], padron []votos.Votante) {
 	dni, err := strconv.Atoi(dni_string)
