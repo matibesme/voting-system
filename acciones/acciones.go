@@ -12,27 +12,26 @@ var CONTADOR_IMPUGNADOS = 0
 var CARGOS = []string{"Presidente", "Gobernador", "Intendente"}
 var ENTRADA = []string{"ingresar", "votar", "deshacer", "fin-votar"}
 
-
-func AccionIngresarVotante(dni_string string, cola cola.Cola[int], padron []votos.Votante) {
+func AccionIngresarVotante(dni_string string, cola cola.Cola[int], padron []votos.Votante) error {
 	dni, err := strconv.Atoi(dni_string)
 
 	if err != nil || dni <= 0 {
-		fmt.Println(errores.DNIError{})
+		return errores.DNIError{}
 	} else {
 		votante := EstaEnPadron(dni, padron)
 		if votante == -1 {
-			fmt.Println(errores.DNIFueraPadron{})
+			return errores.DNIFueraPadron{}
 		} else {
 			cola.Encolar(votante)
-			fmt.Println("OK")
+			return nil
 		}
 	}
 }
 
-func AccionVotar(entrada []string, cola cola.Cola[int], padron []votos.Votante, crear_partidos []votos.Partido, lista_partidos []string) {
+func AccionVotar(entrada []string, cola cola.Cola[int], padron []votos.Votante, crear_partidos []votos.Partido, lista_partidos []string) error {
 
 	if len(entrada) != 3 {
-		fmt.Println(errores.ErrorParametros{})
+		return errores.ErrorParametros{}
 
 	} else {
 
@@ -40,62 +39,61 @@ func AccionVotar(entrada []string, cola cola.Cola[int], padron []votos.Votante, 
 		candidato, err := strconv.Atoi(entrada[2])
 
 		if cola.EstaVacia() {
-			fmt.Println(errores.FilaVacia{})
+			return errores.FilaVacia{}
 
 		} else if err2 != nil || cargo == 3 {
-			fmt.Println(errores.ErrorTipoVoto{})
+			return errores.ErrorTipoVoto{}
 		} else if err != nil || !partidoValido(lista_partidos, candidato) {
-			fmt.Println(errores.ErrorAlternativaInvalida{})
+			return errores.ErrorAlternativaInvalida{}
 		} else {
 			votar := (padron[cola.VerPrimero()]).Votar(cargo, candidato)
 
 			if votar == nil {
-				fmt.Println("OK")
+				return nil
 			} else {
 				//error de votar
-				fmt.Println(votar)
 				cola.Desencolar()
+				return votar
 			}
 
 		}
 	}
 }
 
-func AccionDeshacer(cola cola.Cola[int], padrones []votos.Votante) {
+func AccionDeshacer(cola cola.Cola[int], padrones []votos.Votante) error {
 
 	if cola.EstaVacia() {
-		fmt.Println(errores.FilaVacia{})
+		return errores.FilaVacia{}
 	} else {
 		deshacer := padrones[cola.VerPrimero()].Deshacer()
 		if deshacer == (errores.ErrorNoHayVotosAnteriores{}) {
-			fmt.Println(deshacer)
+			return deshacer
 		} else if deshacer == nil {
-			fmt.Println("OK")
+			return nil
 		} else {
-			fmt.Println(deshacer)
 			cola.Desencolar()
-
+			return deshacer
 		}
 	}
-
 }
 
-func AccionFinVotante(cola cola.Cola[int], padrones []votos.Votante, partidos []votos.Partido) {
+func AccionFinVotante(cola cola.Cola[int], padrones []votos.Votante, partidos []votos.Partido) error {
 	if cola.EstaVacia() {
-		fmt.Println(errores.FilaVacia{})
+		return errores.FilaVacia{}
 	} else {
 		votante_actual := padrones[cola.Desencolar()]
 		datos, err := votante_actual.FinVoto()
 		if err != nil {
-			fmt.Println(err)
+			return err
 		} else if datos.Impugnado {
 			CONTADOR_IMPUGNADOS++
-			fmt.Println("OK")
+			return nil
 		} else {
-			fmt.Println("OK")
+
 			for i := 0; i < 3; i++ {
 				partidos[datos.VotoPorTipo[i]].VotadoPara(votos.TipoVoto(i))
 			}
+			return nil
 
 		}
 	}

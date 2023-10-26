@@ -33,19 +33,24 @@ func main() {
 
 	for texto_ingresado.Scan() {
 		texto_ingresado := strings.Split(texto_ingresado.Text(), " ")
-
+		var hayError error
 		switch texto_ingresado[0] {
 		case acciones.ENTRADA[0]:
-			acciones.AccionIngresarVotante(texto_ingresado[1], cola_votantes, padrones_ordenados)
+			hayError = acciones.AccionIngresarVotante(texto_ingresado[1], cola_votantes, padrones_ordenados)
 
 		case acciones.ENTRADA[1]:
-			acciones.AccionVotar(texto_ingresado, cola_votantes, padrones_ordenados, crear_partidos, lista_partidos)
+			hayError = acciones.AccionVotar(texto_ingresado, cola_votantes, padrones_ordenados, crear_partidos, lista_partidos)
 
 		case acciones.ENTRADA[2]:
-			acciones.AccionDeshacer(cola_votantes, padrones_ordenados)
+			hayError = acciones.AccionDeshacer(cola_votantes, padrones_ordenados)
 
 		case acciones.ENTRADA[3]:
-			acciones.AccionFinVotante(cola_votantes, padrones_ordenados, crear_partidos)
+			hayError = acciones.AccionFinVotante(cola_votantes, padrones_ordenados, crear_partidos)
+		}
+		if hayError == nil {
+			fmt.Println("OK")
+		} else {
+			fmt.Println(hayError)
 		}
 
 	}
