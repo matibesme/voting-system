@@ -28,6 +28,7 @@ func main() {
 
 	crear_partidos := acciones.CrearPartidos(lista_partidos)
 	padrones_ordenados := acciones.OrdenarPadron(lista_padrones)
+	impugnados_totales := 0
 	cola_votantes := cola.CrearColaEnlazada[int]()
 	texto_ingresado := bufio.NewScanner(os.Stdin)
 
@@ -45,7 +46,7 @@ func main() {
 			hayError = acciones.AccionDeshacer(cola_votantes, padrones_ordenados)
 
 		case acciones.ENTRADA[3]:
-			hayError = acciones.AccionFinVotante(cola_votantes, padrones_ordenados, crear_partidos)
+			hayError = acciones.AccionFinVotante(cola_votantes, padrones_ordenados, crear_partidos, &impugnados_totales)
 		}
 		if hayError == nil {
 			fmt.Println("OK")
@@ -54,6 +55,6 @@ func main() {
 		}
 
 	}
-	acciones.AccionResultadosElectorales(crear_partidos, cola_votantes, padrones_ordenados)
+	acciones.AccionResultadosElectorales(crear_partidos, cola_votantes, padrones_ordenados, &impugnados_totales)
 
 }

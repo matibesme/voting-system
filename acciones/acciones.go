@@ -8,7 +8,6 @@ import (
 	"tp1/diseno_alumnos/votos"
 )
 
-var CONTADOR_IMPUGNADOS = 0
 var CARGOS = []string{"Presidente", "Gobernador", "Intendente"}
 var ENTRADA = []string{"ingresar", "votar", "deshacer", "fin-votar"}
 
@@ -77,7 +76,7 @@ func AccionDeshacer(cola cola.Cola[int], padrones []votos.Votante) error {
 	}
 }
 
-func AccionFinVotante(cola cola.Cola[int], padrones []votos.Votante, partidos []votos.Partido) error {
+func AccionFinVotante(cola cola.Cola[int], padrones []votos.Votante, partidos []votos.Partido, impugnados *int) error {
 	if cola.EstaVacia() {
 		return errores.FilaVacia{}
 	} else {
@@ -86,7 +85,7 @@ func AccionFinVotante(cola cola.Cola[int], padrones []votos.Votante, partidos []
 		if err != nil {
 			return err
 		} else if datos.Impugnado {
-			CONTADOR_IMPUGNADOS++
+			*impugnados++
 			return nil
 		} else {
 
@@ -99,7 +98,7 @@ func AccionFinVotante(cola cola.Cola[int], padrones []votos.Votante, partidos []
 	}
 }
 
-func AccionResultadosElectorales(partidosCreados []votos.Partido, cola_voto cola.Cola[int], padrones []votos.Votante) {
+func AccionResultadosElectorales(partidosCreados []votos.Partido, cola_voto cola.Cola[int], padrones []votos.Votante, impugnados *int) {
 	if !cola_voto.EstaVacia() {
 		fmt.Println(errores.ErrorCiudadanosSinVotar{})
 	}
@@ -110,9 +109,9 @@ func AccionResultadosElectorales(partidosCreados []votos.Partido, cola_voto cola
 		}
 		fmt.Println()
 	}
-	if CONTADOR_IMPUGNADOS == 1 {
-		fmt.Println("Votos Impugnados:", CONTADOR_IMPUGNADOS, "voto")
+	if *impugnados == 1 {
+		fmt.Println("Votos Impugnados:", *impugnados, "voto")
 	} else {
-		fmt.Println("Votos Impugnados:", CONTADOR_IMPUGNADOS, "votos")
+		fmt.Println("Votos Impugnados:", *impugnados, "votos")
 	}
 }
