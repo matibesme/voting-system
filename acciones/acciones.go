@@ -60,16 +60,16 @@ func AccionDeshacer(cola cola.Cola[int], padrones []votos.Votante) error {
 	if cola.EstaVacia() {
 		return errores.FilaVacia{}
 	}
-	deshacer := padrones[cola.VerPrimero()].Deshacer()
-	if deshacer == (errores.ErrorNoHayVotosAnteriores{}) {
-		return deshacer
-	}
-	if deshacer == nil {
-		return nil
-	}
-	cola.Desencolar()
-	return deshacer
+	err := padrones[cola.VerPrimero()].Deshacer()
+	if err != nil {
+		if err != (errores.ErrorNoHayVotosAnteriores{}) {
+			cola.Desencolar()
+		}
 
+		return err
+	}
+
+	return err
 }
 
 func AccionFinVotante(cola cola.Cola[int], padrones []votos.Votante, partidos []votos.Partido, impugnados *int) error {
